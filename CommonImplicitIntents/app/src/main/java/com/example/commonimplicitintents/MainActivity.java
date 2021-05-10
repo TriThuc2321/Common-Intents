@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.lang.Object;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -21,6 +25,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     TextView messagingBtn, phonecallBtn, settingsBtn;
 
+    TextView cameraBtn, calendarBtn, contactBtn;
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static  Uri locationForPhotos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +58,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         emailTxt.setOnClickListener(this);
         searchTxt.setOnClickListener(this);
         //THUC
+
+        //THIEN
+        cameraBtn = findViewById(R.id.thien1);
+        calendarBtn = findViewById(R.id.thien2);
+        contactBtn = findViewById(R.id.thien3);
+
+        cameraBtn.setOnClickListener(this);
+        calendarBtn.setOnClickListener(this);
+        contactBtn.setOnClickListener(this);
+
     }
     @Override
     public void onClick(View v) {
@@ -100,8 +118,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             //-------------------THUC---------------//
+            //-------------------THIEN--------------//
+            case  R.id.thien1:
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT,true);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+                break;
+            case R.id.thien3:
+                intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(intent, 1);
+                }
+
+                break;
+            case R.id.thien2:
+                addEvent("Birthday","Restaurant",1,5);
+                Toast.makeText(MainActivity.this,"Add Event Successfully",Toast.LENGTH_SHORT);
+
+                break;
+                //------------THIEN---------------//
         }
 
-        startActivity(intent);
+//        startActivity(intent);
+    }
+    public void addEvent(String title, String location, long begin, long end) {
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.Events.TITLE, title)
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, location)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, begin)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 }
