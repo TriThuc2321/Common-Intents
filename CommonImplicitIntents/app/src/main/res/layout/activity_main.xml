@@ -101,17 +101,17 @@
             //-------------THIEN-----------//
 
             //-------------THANG-----------//
+
             <TextView
-                android:id="@+id/thang1"
+                android:id="@+id/thangWeb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Thang"
-                android:gravity="center"
-                android:textSize="30dp"
-                android:textColor="@color/black"
-                android:background="@drawable/custom_button"
                 android:layout_marginTop="10dp"
-                />
+                android:background="@drawable/custom_button"
+                android:gravity="center"
+                android:text="Web Browser"
+                android:textColor="@color/black"
+                android:textSize="30dp" />
             <TextView
                 android:id="@+id/thang2"
                 android:layout_width="match_parent"
@@ -124,7 +124,7 @@
                 android:layout_marginTop="10dp"
                 />
             <TextView
-                android:id="@+id/thang3"
+                android:id="@+id/thangStorage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Thang"

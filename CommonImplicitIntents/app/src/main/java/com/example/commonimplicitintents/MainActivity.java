@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     TextView cameraBtn, calendarBtn, contactBtn;
 
+    TextView thangWeb, thangAlarm, thangStorage;
+
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static  Uri locationForPhotos;
     @Override
@@ -67,7 +69,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cameraBtn.setOnClickListener(this);
         calendarBtn.setOnClickListener(this);
         contactBtn.setOnClickListener(this);
-
+        // Thang
+        
     }
     @Override
     public void onClick(View v) {
