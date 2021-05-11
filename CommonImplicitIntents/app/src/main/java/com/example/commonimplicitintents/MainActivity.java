@@ -2,22 +2,19 @@ package com.example.commonimplicitintents;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.SearchManager;
 import android.content.Intent;
-import android.media.MediaPlayer;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.AlarmClock;
 import android.provider.CalendarContract;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.lang.Object;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -70,7 +67,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         calendarBtn.setOnClickListener(this);
         contactBtn.setOnClickListener(this);
         // Thang
-        
+        thangAlarm = findViewById(R.id.thangAlarm);
+        thangStorage = findViewById(R.id.thangStorage);
+        thangWeb = findViewById(R.id.thangWeb);
+
+        thangWeb.setOnClickListener(this);
+        thangStorage.setOnClickListener(this);
+        thangAlarm.setOnClickListener(this);
     }
     @Override
     public void onClick(View v) {
@@ -143,6 +146,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
                 //------------THIEN---------------//
+            //------------THANG---------------//
+            case R.id.thangWeb:
+                String url = "en.uit.edu.vn";
+                if (!url.startsWith("http://") && !url.startsWith("https://"))
+                    url = "http://" + url;
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+                break;
+            case R.id.thangAlarm:
+                    createAlarm("báo thức",1,20);
+                    break;
+            case R.id.thangStorage:
+                selectImage();
+            //------------THANG---------------//
         }
 
 //        startActivity(intent);
@@ -158,4 +177,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
     }
+    public void createAlarm(String message, int hour, int minutes) {
+        Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM)
+                .putExtra(AlarmClock.EXTRA_MESSAGE, message)
+                .putExtra(AlarmClock.EXTRA_HOUR, hour)
+                .putExtra(AlarmClock.EXTRA_MINUTES, minutes);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+    static final int REQUEST_IMAGE_GET = 1;
+
+    public void selectImage() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_IMAGE_GET);
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_GET && resultCode == RESULT_OK) {
+            Bitmap thumbnail = data.getParcelableExtra("data");
+            Uri fullPhotoUri = data.getData();
+            // Do work with photo saved at fullPhotoUri
+        }
+    }
+
 }
